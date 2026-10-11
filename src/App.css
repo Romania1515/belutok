@@ -1,0 +1,69 @@
+:root{font-family:Arial,Helvetica,sans-serif;color:#fff;background:#080910;font-synthesis:none;text-rendering:optimizeLegibility}
+*{box-sizing:border-box}
+html,body,#root{margin:0;width:100%;min-height:100%;background:#080910}
+body{overflow:hidden}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{width:100%;max-width:560px;height:100dvh;height:100svh;min-height:480px;margin:auto;position:relative;overflow:hidden;background:#080910}
+.topbar{position:absolute;top:0;left:0;right:0;height:58px;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:linear-gradient(#080910aa,transparent)}
+.brand{border:0;background:none;color:white;font-size:21px;font-weight:900;letter-spacing:-1px;padding:5px 0}
+.brand span{color:#42e4e8}
+.feed-tabs{display:flex;gap:18px;align-items:center}
+.feed-tabs button{border:0;background:none;color:#c2c2cc;font-size:13px;font-weight:700;padding:8px 0}
+.feed-tabs button.selected{color:white;border-bottom:2px solid #42e4e8}
+.search{background:none;border:0;color:white;font-size:28px;width:30px}
+.feed{position:absolute;inset:0 0 58px}
+.video{position:absolute;inset:0;overflow:hidden;isolation:isolate}
+.space{background:radial-gradient(ellipse at 50% 35%,#5a3c99,#24203f 42%,#10111f 80%)}
+.pixel{background:radial-gradient(ellipse at 50% 40%,#9e3f84,#371c58 60%,#11111f)}
+.hamster{background:radial-gradient(ellipse at 50% 40%,#a8794e,#4a2b35 60%,#11111f)}
+.visual{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+.visual span{font-size:clamp(100px,35vw,190px);filter:drop-shadow(0 15px 25px #0005)}
+.visual small{font-size:11px;letter-spacing:8px;color:#ffffff90;font-weight:800}
+.actual-video{position:absolute;width:100%;height:100%;object-fit:cover;background:#111;z-index:1}
+.video-shade{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,#0005,transparent 20%,transparent 48%,#000a 100%)}
+.video-content{position:absolute;z-index:3;left:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:space-between;padding:18px 12px 16px 16px;gap:8px}
+.post-info{min-width:0;flex:1;padding-bottom:3px;text-shadow:0 1px 4px #0009}
+.username{font-size:14px;font-weight:800;margin-bottom:9px}
+.post-info p{font-size:13px;line-height:1.45;margin:0 0 10px;overflow-wrap:anywhere}
+.sound{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;color:#f4f4f8}
+.actions{display:flex;flex-direction:column;align-items:center;gap:17px;flex-shrink:0;width:46px}
+.actions button{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:none;color:white;padding:0;max-width:100%;text-shadow:0 1px 4px #0009}
+.actions button>span{font-size:27px;line-height:1.1;font-weight:500}
+.actions small{font-size:10px;max-width:50px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.actions button.liked{color:#ff4e88}
+.actions .creator-avatar{width:40px;height:40px;border:2px solid white;border-radius:50%;background:#302744;font-size:23px;display:grid;place-items:center;margin-bottom:1px}
+.creator-avatar i{position:absolute;bottom:-8px;left:12px;width:16px;height:16px;display:grid;place-items:center;background:#42e4e8;color:#101018;border-radius:50%;font-style:normal;font-size:13px;font-weight:900;text-shadow:none}
+.feed-switch{position:absolute;z-index:4;right:14px;top:44%;display:flex;flex-direction:column;gap:10px;opacity:.8}
+.feed-switch button{width:27px;height:27px;border:1px solid #ffffff40;border-radius:50%;background:#0003;color:#fff;font-size:15px}
+.bottom-nav{position:absolute;z-index:8;bottom:0;left:0;right:0;height:58px;padding-bottom:env(safe-area-inset-bottom);display:flex;align-items:center;justify-content:space-around;background:#080910;border-top:1px solid #ffffff12}
+.bottom-nav button{height:100%;flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;background:none;border:0;color:#8d8e9d;padding:3px 0}
+.bottom-nav button>span{font-size:23px;line-height:1.1}
+.bottom-nav small{font-size:9px;font-weight:600}
+.bottom-nav button.active{color:white}
+.bottom-nav button.active>span{color:#42e4e8}
+.bottom-nav .create{flex:0 0 43px;height:30px;border-radius:8px;margin:0 10px;background:linear-gradient(100deg,#42e4e8,#fff 50%,#ff4e88);color:#111}
+.bottom-nav .create>span{font-size:26px;font-weight:800}
+.simple-page{position:absolute;inset:58px 0 58px;overflow:auto;padding:28px 20px;text-align:center}
+.simple-page h2{font-size:22px}
+.simple-page p{color:#aaaab9;font-size:13px}
+.big-avatar{width:82px;height:82px;margin:25px auto 10px;border-radius:50%;display:grid;place-items:center;font-size:43px;background:linear-gradient(135deg,#42e4e8,#9556ef)}
+.stats{display:flex;justify-content:space-evenly;padding:18px 0;margin:20px 0;border-block:1px solid #ffffff18}
+.stats span{display:flex;flex-direction:column;gap:6px;font-size:11px;color:#999}
+.stats b{font-size:19px;color:white}
+.upload-btn{border:0;border-radius:9px;background:#42e4e8;color:#080910;padding:12px 20px;font-weight:800}
+.discover-item{width:100%;display:flex;align-items:center;gap:14px;text-align:left;border:1px solid #ffffff16;border-radius:12px;padding:12px;margin:10px 0;background:#151620;color:white}
+.discover-item>span:first-child{font-size:32px}
+.discover-item small{display:block;margin-top:5px;color:#aaa;font-size:11px}
+.empty{display:grid;place-items:center;height:100%;color:#aaa}
+.overlay{position:absolute;z-index:20;inset:0;background:#0009;display:flex;align-items:flex-end;justify-content:center}
+.comments{width:100%;height:60%;background:#191a23;border-radius:18px 18px 0 0;padding:16px;display:flex;flex-direction:column}
+.comments header{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid #ffffff15}
+.comments header button{border:0;background:none;color:white;font-size:25px}
+.comment-list{flex:1;overflow:auto}
+.comment-list p{font-size:12px;line-height:1.6}
+.comment-list .muted{color:#999}
+.comments form{display:flex;gap:8px;padding-top:12px}
+.comments input{flex:1;min-width:0;background:#292a35;border:1px solid #393b48;border-radius:20px;padding:11px;color:white}
+.comments form button{background:none;border:0;color:#42e4e8;font-weight:800}
+@media(min-width:561px){body{background:#15151d}.app{border-inline:1px solid #ffffff16}}

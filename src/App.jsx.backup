@@ -1,0 +1,204 @@
+import { useRef, useState } from 'react';
+import './App.css';
+
+const initial = [
+  { id: 1, user: 'beluga.dev', caption: 'POV: you finally build your own social media app 🚀', emoji: '🌌', likes: 128, bg: 'one' },
+  { id: 2, user: 'pixelwizard', caption: 'Tiny pixels. HUGE ideas. 🎮✨', emoji: '👾', likes: 96, bg: 'two' },
+  { id: 3, user: 'techhamster', caption: 'The hamster council has approved this message 🐹', emoji: '🐹', likes: 245, bg: 'three' },
+];
+
+export default function App() {
+  const [posts, setPosts] = useState(initial);
+  const [liked, setLiked] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const [tab, setTab] = useState('Home');
+  const [index, setIndex] = useState(0);
+  const [comments, setComments] = useState({});
+  const [draft, setDraft] = useState('');
+  const [commentFor, setCommentFor] = useState(null);
+  const [notice, setNotice] = useState('');
+  const picker = useRef(null);
+
+  const upload = e => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('video/')) {
+      setNotice('Choose a video file, bro!');
+      return;
+    }
+    const post = {
+      id: Date.now(), user: 'you',
+      caption: file.name.replace(/\.[^.]+$/, ''),
+      emoji: '🎬', likes: 0, bg: 'one',
+      url: URL.createObjectURL(file)
+    };
+    setPosts(p => [post, ...p]);
+    setIndex(0);
+    setTab('Home');
+    setNotice('Video added! This preview is only stored on this device.');
+    e.target.value = '';
+  };
+
+  const feed = tab === 'Following'
+    ? posts.filter(p => following.includes(p.user))
+    : posts;
+  const post = feed[Math.min(index, feed.length - 1)];
+
+  function like(id) {
+    setLiked(old => old.includes(id)
+      ? old.filter(x => x !== id)
+      : [...old, id]);
+  }
+
+  function sendComment(e) {
+    e.preventDefault();
+    if (!draft.trim()) return;
+    setComments(old => ({
+      ...old,
+      [commentFor]: [...(old[commentFor] || []), draft.trim()]
+    }));
+    setDraft('');
+  }
+
+  return (
+    <main className="app">
+      <header className="header">
+        <button className="logo" onClick={() => setTab('Home')}>
+          <span>▶</span> Belu<i>Tok</i>
+        </button>
+        <span className="beta">BETA</span>
+        <button className="upload" onClick={() => picker.current?.click()}>＋</button>
+        <input ref={picker} hidden type="file" accept="video/*" onChange={upload}/>
+      </header>
+
+      {notice && <button className="notice" onClick={() => setNotice('')}>{notice}　×</button>}
+
+      {tab === 'Profile' ? (
+        <section className="page profile">
+          <div className="avatar">🐋</div>
+          <h1>Your profile</h1>
+          <p>@you · Local preview</p>
+          <div className="stats">
+            <span><b>{posts.filter(p => p.user === 'you').length}</b>Posts</span>
+            <span><b>{following.length}</b>Following</span>
+            <span><b>{liked.length}</b>Liked</span>
+          </div>
+          <button className="primary" onClick={() => picker.current?.click()}>＋ Upload video</button>
+          <p className="hint">Real accounts are coming in the backend phase.</p>
+        </section>
+      ) : tab === 'Discover' ? (
+        <section className="page">
+          <h1>Discover ✦</h1>
+          <p>Find your next rabbit hole.</p>
+          <div className="grid">
+            {posts.map((p, i) => (
+              <button className={'tile ' + p.bg} key={p.id}
+                onClick={() => { setTab('Home'); setIndex(i); }}>
+                <span>{p.emoji}</span><b>@{p.user}</b>
+              </button>
+            ))}
+          </div>
+        </section>
+      ) : (
+        <section>
+          <div className="tabs">
+            <button className={tab === 'Following' ? 'selected' : ''}
+              onClick={() => { setTab('Following'); setIndex(0); }}>Following</button>
+            <button className={tab === 'Home' ? 'selected' : ''}
+              onClick={() => { setTab('Home'); setIndex(0); }}>For You</button>
+          </div>
+          {!post ? (
+            <div className="empty">
+              <span>👀</span><h2>No videos yet!</h2>
+              <p>Follow a creator or check For You.</p>
+              <button className="primary" onClick={() => setTab('Home')}>For You</button>
+            </div>
+          ) : (
+            <article className="video">
+              <div className={'scene ' + post.bg}>
+                {post.url
+                  ? <video src={post.url} controls playsInline />
+                  : <div className="art"><span>{post.emoji}</span>
+                      <b>BELUTOK <i>ORIGINALS</i></b>
+                      <small>BUILD SOMETHING DIFFERENT</small>
+                    </div>}
+                <div className="shade"/>
+                <div className="details">
+                  <div className="creator">
+                    <span className="mini">{post.emoji}</span>
+                    <b>@{post.user}</b>
+                    <button className="follow"
+                      onClick={() => setFollowing(old => old.includes(post.user)
+                        ? old.filter(x => x !== post.user)
+                        : [...old, post.user])}>
+                      {following.includes(post.user) ? 'Following' : '+ Follow'}
+                    </button>
+                  </div>
+                  <p>{post.caption}</p>
+                  <small>♫ Original audio · BeluTok</small>
+                </div>
+                <div className="actions">
+                  <button onClick={() => like(post.id)}>
+                    <span className={liked.includes(post.id) ? 'red' : ''}>
+                      {liked.includes(post.id) ? '♥' : '♡'}
+                    </span>
+                    <small>{post.likes + (liked.includes(post.id) ? 1 : 0)}</small>
+                  </button>
+                  <button onClick={() => setCommentFor(post.id)}>
+                    <span>▢</span>
+                    <small>{(comments[post.id] || []).length} comments</small>
+                  </button>
+                  <button onClick={() => {
+                    setNotice('Caption: ' + post.caption);
+                    navigator.clipboard?.writeText(post.caption).catch(() => {});
+                  }}><span>↗</span><small>Share</small></button>
+                  <div className="disc">♫</div>
+                </div>
+              </div>
+              <div className="controls">
+                <button disabled={index === 0}
+                  onClick={() => setIndex(i => i - 1)}>↑ Previous</button>
+                <span>{index + 1} / {feed.length}</span>
+                <button disabled={index >= feed.length - 1}
+                  onClick={() => setIndex(i => i + 1)}>↓ Next</button>
+              </div>
+            </article>
+          )}
+        </section>
+      )}
+
+      <nav className="nav">
+        <button className={tab === 'Home' ? 'active' : ''}
+          onClick={() => { setTab('Home'); setIndex(0); }}>⌂<small>Home</small></button>
+        <button className={tab === 'Discover' ? 'active' : ''}
+          onClick={() => setTab('Discover')}>⌕<small>Discover</small></button>
+        <button className="create" onClick={() => picker.current?.click()}>＋</button>
+        <button className={tab === 'Following' ? 'active' : ''}
+          onClick={() => { setTab('Following'); setIndex(0); }}>♡<small>Following</small></button>
+        <button className={tab === 'Profile' ? 'active' : ''}
+          onClick={() => setTab('Profile')}>◉<small>Profile</small></button>
+      </nav>
+
+      {commentFor !== null && (
+        <div className="backdrop" onClick={() => setCommentFor(null)}>
+          <section className="sheet" onClick={e => e.stopPropagation()}>
+            <div className="sheet-title"><b>Comments</b>
+              <button onClick={() => setCommentFor(null)}>×</button>
+            </div>
+            <div className="comment-list">
+              {(comments[commentFor] || []).map((c, i) =>
+                <p key={i}>🐋 <b>@you</b>　{c}</p>)}
+              {!(comments[commentFor] || []).length &&
+                <p className="hint">Be the first to comment 👀</p>}
+            </div>
+            <form onSubmit={sendComment}>
+              <input value={draft} onChange={e => setDraft(e.target.value)}
+                placeholder="Add a comment..." maxLength={300}/>
+              <button>Post</button>
+            </form>
+          </section>
+        </div>
+      )}
+    </main>
+  );
+}
